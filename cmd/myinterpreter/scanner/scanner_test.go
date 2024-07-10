@@ -194,3 +194,63 @@ func TestNextTokenV2(t *testing.T) {
 	fmt.Println("Test 3 ran Successfully")
 	fmt.Println(tokens[0].ToString())
 }
+
+func TestNextTokenV3(t *testing.T) {
+	input := `(()`
+	s := New(input)
+
+	expectedResult := []token.Token{
+		{
+			Type:    token.LPAREN,
+			Lexeme:  "(",
+			Literal: nil,
+		},
+		{
+			Type:    token.LPAREN,
+			Lexeme:  "(",
+			Literal: nil,
+		}, {
+			Type:    token.RPAREN,
+			Lexeme:  ")",
+			Literal: nil,
+		},
+		{
+			Type:    token.EOF,
+			Lexeme:  "",
+			Literal: nil,
+		},
+	}
+
+	tokens := make([]token.Token, 0)
+
+	for _, result := range expectedResult {
+		tok := s.NextToken()
+		tokens = append(tokens, tok)
+		if result.Type != tok.Type {
+			t.Fatalf("Expected token type - %v recieved token type - %v", result.Type, tok.Type)
+		}
+
+		if result.Lexeme != tok.Lexeme {
+			t.Fatalf(
+				"Expected token Lexeme - %v recieved token Lexeme - %s",
+				result.Lexeme,
+				tok.Lexeme,
+			)
+		}
+
+		if result.Literal != tok.Literal {
+			t.Fatalf(
+				"Expected token literal - %v recieved token literal - %v",
+				result.Literal,
+				tok.Literal,
+			)
+		}
+	}
+
+	fmt.Println("Test 4 Ran Successfully.")
+	var result string
+	for _, token := range tokens {
+		result += token.ToString() + "\n"
+	}
+	fmt.Println(result)
+}

@@ -9,8 +9,8 @@ const (
 	EOF               = "EOF"
 
 	//single char tokens
-	LPAREN    = "("
-	RPAREN    = ")"
+	LPAREN    = "LEFT_PAREN"
+	RPAREN    = "RIGHT_PAREN"
 	LBRACE    = "{"
 	RBRACE    = "}"
 	COMMA     = ","

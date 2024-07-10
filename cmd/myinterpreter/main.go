@@ -44,7 +44,7 @@ func main() {
 
 		var result string
 		for _, token := range tokens {
-			result += token.ToString()
+			result += token.ToString() + "\n"
 		}
 		fmt.Println(result)
 	} else {
