@@ -7,7 +7,7 @@ import (
 	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/token"
 )
 
-func TestNextToken(t *testing.T) {
+func TestNextToken1(t *testing.T) {
 	input := `=+(){},;`
 	s := New(input)
 
@@ -86,7 +86,7 @@ func TestNextToken(t *testing.T) {
 }
 
 /*
-func TestNextTokenV1(t *testing.T) {
+func TestNextToken2(t *testing.T) {
 	input := `var language = "lox";`
 	s := New(input)
 	_ = s
@@ -153,7 +153,7 @@ func TestNextTokenV1(t *testing.T) {
 }
 */
 
-func TestNextTokenV2(t *testing.T) {
+func TestNextToken3(t *testing.T) {
 	input := ""
 	s := New(input)
 	_ = s
@@ -195,7 +195,7 @@ func TestNextTokenV2(t *testing.T) {
 	fmt.Println(tokens[0].ToString())
 }
 
-func TestNextTokenV3(t *testing.T) {
+func TestNextToken4(t *testing.T) {
 	input := `(()`
 	s := New(input)
 
@@ -248,6 +248,72 @@ func TestNextTokenV3(t *testing.T) {
 	}
 
 	fmt.Println("Test 4 Ran Successfully.")
+	var result string
+	for _, token := range tokens {
+		result += token.ToString() + "\n"
+	}
+	fmt.Println(result)
+}
+
+func TestNextToken5(t *testing.T) {
+	input := `{{}}`
+	s := New(input)
+
+	expectedResult := []token.Token{
+		{
+			Type:    token.LBRACE,
+			Lexeme:  "{",
+			Literal: nil,
+		},
+		{
+			Type:    token.LBRACE,
+			Lexeme:  "{",
+			Literal: nil,
+		},
+		{
+			Type:    token.RBRACE,
+			Lexeme:  "}",
+			Literal: nil,
+		},
+		{
+			Type:    token.RBRACE,
+			Lexeme:  "}",
+			Literal: nil,
+		},
+		{
+			Type:    token.EOF,
+			Lexeme:  "",
+			Literal: nil,
+		},
+	}
+
+	tokens := make([]token.Token, 0)
+
+	for _, result := range expectedResult {
+		tok := s.NextToken()
+		tokens = append(tokens, tok)
+		if result.Type != tok.Type {
+			t.Fatalf("Expected token type - %v recieved token type - %v", result.Type, tok.Type)
+		}
+
+		if result.Lexeme != tok.Lexeme {
+			t.Fatalf(
+				"Expected token Lexeme - %v recieved token Lexeme - %s",
+				result.Lexeme,
+				tok.Lexeme,
+			)
+		}
+
+		if result.Literal != tok.Literal {
+			t.Fatalf(
+				"Expected token literal - %v recieved token literal - %v",
+				result.Literal,
+				tok.Literal,
+			)
+		}
+	}
+
+	fmt.Println("Test 5 Ran Successfully.")
 	var result string
 	for _, token := range tokens {
 		result += token.ToString() + "\n"

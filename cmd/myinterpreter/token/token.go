@@ -11,8 +11,8 @@ const (
 	//single char tokens
 	LPAREN    = "LEFT_PAREN"
 	RPAREN    = "RIGHT_PAREN"
-	LBRACE    = "{"
-	RBRACE    = "}"
+	LBRACE    = "LEFT_BRACE"
+	RBRACE    = "RIGHT_BRACE"
 	COMMA     = ","
 	DOT       = "."
 	MINUS     = "-"
