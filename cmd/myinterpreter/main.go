@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/scanner"
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/token"
 )
 
 func main() {
@@ -21,18 +24,31 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Uncomment this block to pass the first stage
-	//
-	// filename := os.Args[2]
-	// fileContents, err := os.ReadFile(filename)
-	// if err != nil {
-	// 	fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
-	// 	os.Exit(1)
-	// }
-	//
-	// if len(fileContents) > 0 {
-	// 	panic("Scanner not implemented")
-	// } else {
-	// 	fmt.Println("EOF  null") // Placeholder, remove this line when implementing the scanner
-	// }
+	filename := os.Args[2]
+	fileContents, err := os.ReadFile(filename)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+		os.Exit(1)
+	}
+
+	if len(fileContents) > 0 {
+		s := scanner.New(string(fileContents))
+		tokens := make([]token.Token, 0)
+		for {
+			tok := s.NextToken()
+			tokens = append(tokens, tok)
+			if tok.Type == token.EOF {
+				break
+			}
+		}
+
+		var result string
+		for _, token := range tokens {
+			result += token.ToString()
+		}
+		fmt.Println(result)
+	} else {
+		tok := token.New(token.EOF, "", nil, 0)
+		fmt.Println(tok.ToString())
+	}
 }
