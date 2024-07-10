@@ -57,8 +57,14 @@ func (s *Scanner) NextToken() token.Token {
 		tok = token.New(token.PLUS, string(s.ch), nil, 1)
 	case ',':
 		tok = token.New(token.COMMA, string(s.ch), nil, 1)
+	case '*':
+		tok = token.New(token.STAR, string(s.ch), nil, 1)
 	case '0':
 		tok = token.New(token.EOF, "", nil, 1)
+	case '.':
+		tok = token.New(token.DOT, string(s.ch), nil, 1)
+	case '-':
+		tok = token.New(token.MINUS, string(s.ch), nil, 1)
 	default:
 		if isLetter(s.ch) {
 			tok = fromSymbol(s.readIdentifier())

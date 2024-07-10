@@ -256,6 +256,97 @@ func TestNextToken4(t *testing.T) {
 }
 
 func TestNextToken5(t *testing.T) {
+	input := `({*.,+*})`
+	s := New(input)
+
+	expectedResult := []token.Token{
+		{
+			Type:    token.LPAREN,
+			Lexeme:  "(",
+			Literal: nil,
+		},
+		{
+			Type:    token.LBRACE,
+			Lexeme:  "{",
+			Literal: nil,
+		},
+		{
+			Type:    token.STAR,
+			Lexeme:  "*",
+			Literal: nil,
+		},
+		{
+			Type:    token.DOT,
+			Lexeme:  ".",
+			Literal: nil,
+		},
+		{
+			Type:    token.COMMA,
+			Lexeme:  ",",
+			Literal: nil,
+		},
+		{
+			Type:    token.PLUS,
+			Lexeme:  "+",
+			Literal: nil,
+		},
+		{
+			Type:    token.STAR,
+			Lexeme:  "*",
+			Literal: nil,
+		},
+		{
+			Type:    token.RBRACE,
+			Lexeme:  "}",
+			Literal: nil,
+		},
+		{
+			Type:    token.RPAREN,
+			Lexeme:  ")",
+			Literal: nil,
+		},
+		{
+			Type:    token.EOF,
+			Lexeme:  "",
+			Literal: nil,
+		},
+	}
+
+	tokens := make([]token.Token, 0)
+
+	for _, result := range expectedResult {
+		tok := s.NextToken()
+		tokens = append(tokens, tok)
+		if result.Type != tok.Type {
+			t.Fatalf("Expected token type - %v recieved token type - %v", result.Type, tok.Type)
+		}
+
+		if result.Lexeme != tok.Lexeme {
+			t.Fatalf(
+				"Expected token Lexeme - %v recieved token Lexeme - %s",
+				result.Lexeme,
+				tok.Lexeme,
+			)
+		}
+
+		if result.Literal != tok.Literal {
+			t.Fatalf(
+				"Expected token literal - %v recieved token literal - %v",
+				result.Literal,
+				tok.Literal,
+			)
+		}
+	}
+
+	fmt.Println("Test 5 Ran Successfully.")
+	var result string
+	for _, token := range tokens {
+		result += token.ToString() + "\n"
+	}
+	fmt.Println(result)
+}
+
+func TestNextToken6(t *testing.T) {
 	input := `{{}}`
 	s := New(input)
 
@@ -313,7 +404,7 @@ func TestNextToken5(t *testing.T) {
 		}
 	}
 
-	fmt.Println("Test 5 Ran Successfully.")
+	fmt.Println("Test 6 Ran Successfully.")
 	var result string
 	for _, token := range tokens {
 		result += token.ToString() + "\n"
