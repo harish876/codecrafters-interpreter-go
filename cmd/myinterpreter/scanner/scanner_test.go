@@ -454,8 +454,17 @@ func TestNextToken11(t *testing.T) {
   `
 	s := New(input)
 
-	tokens, erroredTokens := s.Collect()
+	tokens, _ := s.Collect()
 	s.Print(tokens)
-	fmt.Println("Errored Tokens", erroredTokens)
 	fmt.Println("Test 11 Ran Successfully.")
+}
+
+func TestNextToken12(t *testing.T) {
+	input := `# (
+) @`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 12 Ran Successfully.")
 }

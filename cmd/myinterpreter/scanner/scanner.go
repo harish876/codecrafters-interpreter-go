@@ -144,6 +144,9 @@ func isLetter(char byte) bool {
 
 func (s *Scanner) skipWhitespace() {
 	for s.ch == ' ' || s.ch == '\t' || s.ch == '\r' || s.ch == '\n' {
+		if s.ch == '\n' {
+			s.line += 1
+		}
 		s.readChar()
 	}
 }
@@ -173,6 +176,7 @@ func (s *Scanner) readComment() string {
 	for s.ch != '0' && s.ch != '\n' {
 		s.readChar()
 	}
+	s.line += 1
 	return s.input[position:s.position]
 }
 
