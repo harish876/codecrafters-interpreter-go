@@ -41,7 +41,7 @@ const (
 	CLASS  = "CLASS"
 	ELSE   = "ELSE"
 	FALSE  = "FALSE"
-	FUNC   = "FUNC"
+	FUNC   = "FUN"
 	FOR    = "FOR"
 	IF     = "IF"
 	NIL    = "NIL"
