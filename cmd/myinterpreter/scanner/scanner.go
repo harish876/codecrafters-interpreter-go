@@ -75,6 +75,20 @@ func (s *Scanner) NextToken() token.Token {
 		} else {
 			tok = token.New(token.BANG, string(s.ch), nil, s.line)
 		}
+	case '>':
+		if s.peakChar(s.position+1) == '=' {
+			s.readChar()
+			tok = token.New(token.GREATER_EQUAL, string(">="), nil, s.line)
+		} else {
+			tok = token.New(token.GREATER, string(s.ch), nil, s.line)
+		}
+	case '<':
+		if s.peakChar(s.position+1) == '=' {
+			s.readChar()
+			tok = token.New(token.LESS_EQUAL, string("<="), nil, s.line)
+		} else {
+			tok = token.New(token.LESS, string(s.ch), nil, s.line)
+		}
 	case ';':
 		tok = token.New(token.SEMICOLON, string(s.ch), nil, s.line)
 	case '+':

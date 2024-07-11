@@ -438,3 +438,12 @@ func TestNextToken9(t *testing.T) {
 	s.Print(tokens)
 	fmt.Println("Test 9 Ran Successfully.")
 }
+
+func TestNextToken10(t *testing.T) {
+	input := `<<=>>=`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 10 Ran Successfully.")
+}
