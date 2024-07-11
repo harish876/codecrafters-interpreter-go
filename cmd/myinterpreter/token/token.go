@@ -32,9 +32,9 @@ const (
 	LESS_EQUAL    = "LESS_EQUAL"
 
 	//literals
-	IDENTFIER = "IDENTFIER"
-	STRING    = "STRING"
-	NUMBER    = "NUMBER"
+	IDENTIFIER = "IDENTIFIER"
+	STRING     = "STRING"
+	NUMBER     = "NUMBER"
 
 	//keywords
 	AND    = "AND"
