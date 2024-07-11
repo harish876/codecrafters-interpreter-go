@@ -229,10 +229,6 @@ func (s *Scanner) readComment() string {
 	return s.input[position:s.position]
 }
 
-/*
-super
-*/
-
 func (s *Scanner) fromSymbol(literal string) token.Token {
 	lexeme := literal
 	var tok token.Token
