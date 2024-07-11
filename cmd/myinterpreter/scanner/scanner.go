@@ -105,7 +105,7 @@ func (s *Scanner) NextToken() token.Token {
 		if s.peakChar() == '/' {
 			comment := s.readComment()
 			tok = token.New(
-				token.IDENTFIER,
+				token.IDENTIFIER,
 				"//"+comment,
 				comment,
 				s.line,
@@ -162,11 +162,13 @@ func (s *Scanner) skipWhitespace() {
 
 func (s *Scanner) readIdentifier() string {
 	position := s.position
-	for isLetter(s.ch) {
+	for isLetter(s.ch) || isNumber(s.ch) {
 		s.readChar()
 	}
 	//do i need to rewind here?
-	return s.input[position:s.position]
+	currentPosition := s.position
+	s.rewind()
+	return s.input[position:currentPosition]
 }
 
 // single line string literals
@@ -200,6 +202,19 @@ func (s *Scanner) readNumber() token.Token {
 	numLexeme := s.input[position:s.position]
 	s.rewind()
 	literal := numLexeme
+
+	//remove trailing zeroes
+	if dotCount > 0 {
+		endIdx := len(literal)
+		for endIdx > 0 && literal[endIdx-1] == '0' {
+			endIdx -= 1
+		}
+		if endIdx > 0 && literal[endIdx-1] == '.' {
+			endIdx -= 1
+			dotCount -= 1
+		}
+		literal = literal[:endIdx]
+	}
 	if dotCount == 0 {
 		literal += ".0"
 	}
@@ -222,7 +237,7 @@ func (s *Scanner) fromSymbol(literal string) token.Token {
 	case "var":
 		tok = token.New(token.VAR, lexeme, nil, s.line)
 	default:
-		tok = token.New(token.IDENTFIER, lexeme, nil, s.line)
+		tok = token.New(token.IDENTIFIER, lexeme, nil, s.line)
 
 	}
 	return tok

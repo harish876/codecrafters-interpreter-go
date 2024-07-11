@@ -97,7 +97,7 @@ func TestNextToken2(t *testing.T) {
 			Literal: nil,
 		},
 		{
-			Type:    token.IDENTFIER,
+			Type:    token.IDENTIFIER,
 			Lexeme:  "language",
 			Literal: nil,
 		},
@@ -509,10 +509,20 @@ func TestNextToken16(t *testing.T) {
 }
 
 func TestNextToken17(t *testing.T) {
-	input := `1234.`
+	input := `200.102000`
+
 	s := New(input)
 
 	tokens, _ := s.Collect()
 	s.Print(tokens)
-	fmt.Println("Test 16 Ran Successfully.")
+	fmt.Println("Test 17 Ran Successfully.")
+}
+
+func TestNextToken18(t *testing.T) {
+	input := `_123bar+hello world_ bar`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 18 Ran Successfully.")
 }
