@@ -3,7 +3,6 @@ package scanner
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/token"
 )
@@ -230,12 +229,46 @@ func (s *Scanner) readComment() string {
 	return s.input[position:s.position]
 }
 
+/*
+super
+*/
+
 func (s *Scanner) fromSymbol(literal string) token.Token {
-	lexeme := strings.ToLower(literal)
+	lexeme := literal
 	var tok token.Token
 	switch lexeme {
 	case "var":
 		tok = token.New(token.VAR, lexeme, nil, s.line)
+	case "and":
+		tok = token.New(token.AND, lexeme, nil, s.line)
+	case "class":
+		tok = token.New(token.CLASS, lexeme, nil, s.line)
+	case "else":
+		tok = token.New(token.ELSE, lexeme, nil, s.line)
+	case "false":
+		tok = token.New(token.FALSE, lexeme, nil, s.line)
+	case "true":
+		tok = token.New(token.TRUE, lexeme, nil, s.line)
+	case "for":
+		tok = token.New(token.FOR, lexeme, nil, s.line)
+	case "fun":
+		tok = token.New(token.FUNC, lexeme, nil, s.line)
+	case "if":
+		tok = token.New(token.IF, lexeme, nil, s.line)
+	case "nil":
+		tok = token.New(token.NIL, lexeme, nil, s.line)
+	case "or":
+		tok = token.New(token.OR, lexeme, nil, s.line)
+	case "print":
+		tok = token.New(token.PRINT, lexeme, nil, s.line)
+	case "return":
+		tok = token.New(token.RETURN, lexeme, nil, s.line)
+	case "this":
+		tok = token.New(token.THIS, lexeme, nil, s.line)
+	case "while":
+		tok = token.New(token.WHILE, lexeme, nil, s.line)
+	case "super":
+		tok = token.New(token.SUPER, lexeme, nil, s.line)
 	default:
 		tok = token.New(token.IDENTIFIER, lexeme, nil, s.line)
 
