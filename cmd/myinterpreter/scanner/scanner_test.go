@@ -447,3 +447,15 @@ func TestNextToken10(t *testing.T) {
 	s.Print(tokens)
 	fmt.Println("Test 10 Ran Successfully.")
 }
+
+func TestNextToken11(t *testing.T) {
+	input := `// this is a code comment
+   /
+  `
+	s := New(input)
+
+	tokens, erroredTokens := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Errored Tokens", erroredTokens)
+	fmt.Println("Test 11 Ran Successfully.")
+}

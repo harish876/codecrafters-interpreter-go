@@ -18,7 +18,7 @@ const (
 	MINUS     = "MINUS"
 	PLUS      = "PLUS"
 	SEMICOLON = "SEMICOLON"
-	SLASH     = "SLAS"
+	SLASH     = "SLASH"
 	STAR      = "STAR"
 
 	//operator
@@ -56,25 +56,30 @@ const (
 )
 
 type Token struct {
-	Type     TokenType
-	Lexeme   string
-	Literal  interface{} //declared as object in the robert nystrom book
-	Line     int
-	HasError bool
+	Type      TokenType
+	Lexeme    string
+	Literal   interface{} //declared as object in the robert nystrom book
+	Line      int
+	HasError  bool
+	IsComment bool
 }
 
-func New(tokType TokenType, lexeme string, literal any, line int, args ...any) Token {
+func New(tokType TokenType, lexeme string, literal any, line int, args ...bool) Token {
 	hasError := false
-	if len(args) > 0 {
-		hasError = args[0].(bool)
+	isComment := false
+	if len(args) == 1 {
+		hasError = args[0]
+	} else if len(args) == 2 {
+		isComment = args[1]
 	}
 
 	return Token{
-		Type:     tokType,
-		Lexeme:   lexeme,
-		Literal:  literal,
-		Line:     line,
-		HasError: hasError,
+		Type:      tokType,
+		Lexeme:    lexeme,
+		Literal:   literal,
+		Line:      line,
+		HasError:  hasError,
+		IsComment: isComment,
 	}
 }
 

@@ -89,6 +89,24 @@ func (s *Scanner) NextToken() token.Token {
 		} else {
 			tok = token.New(token.LESS, string(s.ch), nil, s.line)
 		}
+
+	case '/':
+		if s.peakChar(s.position+1) == '/' {
+			for range 2 {
+				s.readChar()
+			}
+			comment := s.readComment()
+			tok = token.New(
+				token.IDENTFIER,
+				"//"+comment,
+				comment,
+				s.line,
+				false,
+				true,
+			) //temp band aid fix
+		} else {
+			tok = token.New(token.SLASH, string(s.ch), nil, s.line)
+		}
 	case ';':
 		tok = token.New(token.SEMICOLON, string(s.ch), nil, s.line)
 	case '+':
@@ -111,7 +129,7 @@ func (s *Scanner) NextToken() token.Token {
 			str := s.readString()
 			tok = s.fromSymbol(str)
 		} else {
-			tok = token.New(token.ILLEGAL, string(s.ch), nil, 1, true)
+			tok = token.New(token.ILLEGAL, string(s.ch), nil, s.line, true) //band-aid solution idk how to handle this
 			message := fmt.Sprintf("Unexpected character: %s", string(s.ch))
 			s.logError(message)
 		}
@@ -150,6 +168,14 @@ func (s *Scanner) readString() string {
 	return s.input[position:s.position] + string(s.ch)
 }
 
+func (s *Scanner) readComment() string {
+	position := s.position
+	for s.ch != '0' && s.ch != '\n' {
+		s.readChar()
+	}
+	return s.input[position:s.position]
+}
+
 func (s *Scanner) fromSymbol(literal string) token.Token {
 	lexeme := strings.ToLower(literal)
 	var tok token.Token
@@ -178,9 +204,9 @@ func (s *Scanner) Collect() ([]token.Token, []token.Token) {
 	var erroredTokens []token.Token
 	for {
 		tok := s.NextToken()
-		if !tok.HasError {
+		if !tok.HasError && !tok.IsComment {
 			validTokens = append(validTokens, tok)
-		} else {
+		} else if tok.HasError {
 			erroredTokens = append(erroredTokens, tok)
 		}
 
