@@ -420,3 +420,12 @@ func TestNextToken7(t *testing.T) {
 	fmt.Println(tokens)
 	fmt.Println("Test 7 Ran Successfully.")
 }
+
+func TestNextToken8(t *testing.T) {
+	input := `={===}`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 8 Ran Successfully.")
+}

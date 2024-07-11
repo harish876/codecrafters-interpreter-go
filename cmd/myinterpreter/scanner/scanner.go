@@ -62,7 +62,19 @@ func (s *Scanner) NextToken() token.Token {
 	case '}':
 		tok = token.New(token.RBRACE, string(s.ch), nil, s.line)
 	case '=':
-		tok = token.New(token.EQUAL, string(s.ch), nil, s.line)
+		if s.peakChar(s.position+1) == '=' {
+			s.readChar()
+			tok = token.New(token.EQUAL_EQUAL, string("=="), nil, s.line)
+		} else {
+			tok = token.New(token.EQUAL, string(s.ch), nil, s.line)
+		}
+	case '!':
+		if s.peakChar(s.position+1) == '=' {
+			s.readChar()
+			tok = token.New(token.BANG_EQUAL, string("!="), nil, s.line)
+		} else {
+			tok = token.New(token.BANG, string(s.ch), nil, s.line)
+		}
 	case ';':
 		tok = token.New(token.SEMICOLON, string(s.ch), nil, s.line)
 	case '+':
@@ -165,10 +177,11 @@ func (s *Scanner) Collect() ([]token.Token, []token.Token) {
 	return validTokens, erroredTokens
 }
 
-func (s *Scanner) Print(tokens []token.Token) {
+func (s *Scanner) Print(tokens []token.Token) string {
 	var result string
 	for _, token := range tokens {
 		result += token.ToString() + "\n"
 	}
 	fmt.Println(result)
+	return result
 }
