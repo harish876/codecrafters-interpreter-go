@@ -92,9 +92,6 @@ func (s *Scanner) NextToken() token.Token {
 
 	case '/':
 		if s.peakChar(s.position+1) == '/' {
-			for range 2 {
-				s.readChar()
-			}
 			comment := s.readComment()
 			tok = token.New(
 				token.IDENTFIER,
@@ -126,8 +123,7 @@ func (s *Scanner) NextToken() token.Token {
 			identifier := s.readIdentifier()
 			tok = s.fromSymbol(identifier)
 		} else if s.ch == '"' {
-			str := s.readString()
-			tok = s.fromSymbol(str)
+			tok = s.readString()
 		} else {
 			tok = token.New(token.ILLEGAL, string(s.ch), nil, s.line, true) //band-aid solution idk how to handle this
 			message := fmt.Sprintf("Unexpected character: %s", string(s.ch))
@@ -159,16 +155,19 @@ func (s *Scanner) readIdentifier() string {
 	return s.input[position:s.position]
 }
 
-func (s *Scanner) readString() string {
+// single line string literals
+func (s *Scanner) readString() token.Token {
 	position := s.position
 	s.readChar()
-	for isLetter(s.ch) {
+	for s.ch != '"' && s.ch != '\n' && s.ch != '0' {
 		s.readChar()
 	}
 	if s.ch != '"' {
-		s.logError(fmt.Sprintf("Incorrectly terminated string: %s", s.input[position:s.position]))
+		s.logError("Unterminated string.")
+		return token.New(token.STRING, "", nil, s.line, true) //todo update lexeme
 	}
-	return s.input[position:s.position] + string(s.ch)
+	lexeme := s.input[position:s.position] + string(s.ch)
+	return token.New(token.STRING, lexeme, lexeme[1:len(lexeme)-1], s.line, false)
 }
 
 func (s *Scanner) readComment() string {
@@ -185,7 +184,7 @@ func (s *Scanner) fromSymbol(literal string) token.Token {
 	var tok token.Token
 	switch lexeme {
 	case "var":
-		tok = token.New(token.VAR, lexeme, nil, 1)
+		tok = token.New(token.VAR, lexeme, nil, s.line)
 	default:
 		if lexeme[0] == '"' && lexeme[len(lexeme)-1] == '"' {
 			escapedLiteral := lexeme[1 : len(lexeme)-1]

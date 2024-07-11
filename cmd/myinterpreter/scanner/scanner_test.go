@@ -461,10 +461,31 @@ func TestNextToken11(t *testing.T) {
 
 func TestNextToken12(t *testing.T) {
 	input := `# (
-) @`
+) @
+// let's go comment!
+#
+`
 	s := New(input)
 
 	tokens, _ := s.Collect()
 	s.Print(tokens)
 	fmt.Println("Test 12 Ran Successfully.")
+}
+
+func TestNextToken13(t *testing.T) {
+	input := `"foo baz"`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 13 Ran Successfully.")
+}
+
+func TestNextToken14(t *testing.T) {
+	input := `"bar`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 13 Ran Successfully.")
 }
