@@ -33,20 +33,11 @@ func main() {
 
 	if len(fileContents) > 0 {
 		s := scanner.New(string(fileContents))
-		tokens := make([]token.Token, 0)
-		for {
-			tok := s.NextToken()
-			tokens = append(tokens, tok)
-			if tok.Type == token.EOF {
-				break
-			}
+		tokens, erroredTokens := s.Collect()
+		s.Print(tokens)
+		if len(erroredTokens) > 0 {
+			os.Exit(65)
 		}
-
-		var result string
-		for _, token := range tokens {
-			result += token.ToString() + "\n"
-		}
-		fmt.Println(result)
 	} else {
 		tok := token.New(token.EOF, "", nil, 0)
 		fmt.Println(tok.ToString())

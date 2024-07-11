@@ -85,7 +85,6 @@ func TestNextToken1(t *testing.T) {
 	fmt.Println("Test 1 Ran Successfully.")
 }
 
-/*
 func TestNextToken2(t *testing.T) {
 	input := `var language = "lox";`
 	s := New(input)
@@ -109,7 +108,7 @@ func TestNextToken2(t *testing.T) {
 		},
 		{
 			Type:    token.STRING,
-			Lexeme:  "lox",
+			Lexeme:  `"lox"`,
 			Literal: "lox", //this is weird i dont understand
 		},
 		{
@@ -149,9 +148,9 @@ func TestNextToken2(t *testing.T) {
 			)
 		}
 	}
+	fmt.Println("Test 2 ran Successfully")
 	fmt.Println(tokens)
 }
-*/
 
 func TestNextToken3(t *testing.T) {
 	input := ""
@@ -410,4 +409,14 @@ func TestNextToken6(t *testing.T) {
 		result += token.ToString() + "\n"
 	}
 	fmt.Println(result)
+}
+
+func TestNextToken7(t *testing.T) {
+	input := `,.$(#`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println(tokens)
+	fmt.Println("Test 7 Ran Successfully.")
 }

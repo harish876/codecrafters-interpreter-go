@@ -56,18 +56,25 @@ const (
 )
 
 type Token struct {
-	Type    TokenType
-	Lexeme  string
-	Literal interface{} //declared as object in the robert nystrom book
-	Line    int
+	Type     TokenType
+	Lexeme   string
+	Literal  interface{} //declared as object in the robert nystrom book
+	Line     int
+	HasError bool
 }
 
-func New(tokType TokenType, lexeme string, literal any, line int) Token {
+func New(tokType TokenType, lexeme string, literal any, line int, args ...any) Token {
+	hasError := false
+	if len(args) > 0 {
+		hasError = args[0].(bool)
+	}
+
 	return Token{
-		Type:    tokType,
-		Lexeme:  lexeme,
-		Literal: literal,
-		Line:    line,
+		Type:     tokType,
+		Lexeme:   lexeme,
+		Literal:  literal,
+		Line:     line,
+		HasError: hasError,
 	}
 }
 
