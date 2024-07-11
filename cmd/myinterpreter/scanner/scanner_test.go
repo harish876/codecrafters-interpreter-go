@@ -429,3 +429,12 @@ func TestNextToken8(t *testing.T) {
 	s.Print(tokens)
 	fmt.Println("Test 8 Ran Successfully.")
 }
+
+func TestNextToken9(t *testing.T) {
+	input := `!!===`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 9 Ran Successfully.")
+}
