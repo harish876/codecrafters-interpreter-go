@@ -487,5 +487,32 @@ func TestNextToken14(t *testing.T) {
 
 	tokens, _ := s.Collect()
 	s.Print(tokens)
-	fmt.Println("Test 13 Ran Successfully.")
+	fmt.Println("Test 14 Ran Successfully.")
+}
+
+func TestNextToken15(t *testing.T) {
+	input := `1234.1234`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 15 Ran Successfully.")
+}
+
+func TestNextToken16(t *testing.T) {
+	input := `1234.1234.1234.`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 16 Ran Successfully.")
+}
+
+func TestNextToken17(t *testing.T) {
+	input := `1234.`
+	s := New(input)
+
+	tokens, _ := s.Collect()
+	s.Print(tokens)
+	fmt.Println("Test 16 Ran Successfully.")
 }

@@ -30,7 +30,7 @@ func New(input string) *Scanner {
 // this corresponds to the advance function in the robert nystrom book
 func (s *Scanner) readChar() {
 	if s.readPosition >= len(s.input) {
-		s.ch = '0'
+		s.ch = 0
 	} else {
 		s.ch = s.input[s.readPosition]
 	}
@@ -38,11 +38,23 @@ func (s *Scanner) readChar() {
 	s.readPosition += 1
 }
 
-func (s *Scanner) peakChar(position int) byte {
+func (s *Scanner) peakChar() byte {
+	position := s.position + 1
 	if position >= len(s.input) {
-		return '0' //EOF
+		return 0 //EOF
 	} else {
 		return s.input[position]
+	}
+}
+
+func (s *Scanner) rewind() {
+	currPosition := s.position
+	if currPosition > 0 {
+		s.position -= 1
+		s.ch = s.input[s.position]
+		s.readPosition = currPosition
+	} else {
+		fmt.Println("Unable to rewind. No character to rewind")
 	}
 }
 
@@ -62,36 +74,35 @@ func (s *Scanner) NextToken() token.Token {
 	case '}':
 		tok = token.New(token.RBRACE, string(s.ch), nil, s.line)
 	case '=':
-		if s.peakChar(s.position+1) == '=' {
+		if s.peakChar() == '=' {
 			s.readChar()
 			tok = token.New(token.EQUAL_EQUAL, string("=="), nil, s.line)
 		} else {
 			tok = token.New(token.EQUAL, string(s.ch), nil, s.line)
 		}
 	case '!':
-		if s.peakChar(s.position+1) == '=' {
+		if s.peakChar() == '=' {
 			s.readChar()
 			tok = token.New(token.BANG_EQUAL, string("!="), nil, s.line)
 		} else {
 			tok = token.New(token.BANG, string(s.ch), nil, s.line)
 		}
 	case '>':
-		if s.peakChar(s.position+1) == '=' {
+		if s.peakChar() == '=' {
 			s.readChar()
 			tok = token.New(token.GREATER_EQUAL, string(">="), nil, s.line)
 		} else {
 			tok = token.New(token.GREATER, string(s.ch), nil, s.line)
 		}
 	case '<':
-		if s.peakChar(s.position+1) == '=' {
+		if s.peakChar() == '=' {
 			s.readChar()
 			tok = token.New(token.LESS_EQUAL, string("<="), nil, s.line)
 		} else {
 			tok = token.New(token.LESS, string(s.ch), nil, s.line)
 		}
-
 	case '/':
-		if s.peakChar(s.position+1) == '/' {
+		if s.peakChar() == '/' {
 			comment := s.readComment()
 			tok = token.New(
 				token.IDENTFIER,
@@ -112,7 +123,7 @@ func (s *Scanner) NextToken() token.Token {
 		tok = token.New(token.COMMA, string(s.ch), nil, s.line)
 	case '*':
 		tok = token.New(token.STAR, string(s.ch), nil, s.line)
-	case '0':
+	case 0:
 		tok = token.New(token.EOF, "", nil, s.line)
 	case '.':
 		tok = token.New(token.DOT, string(s.ch), nil, s.line)
@@ -124,6 +135,8 @@ func (s *Scanner) NextToken() token.Token {
 			tok = s.fromSymbol(identifier)
 		} else if s.ch == '"' {
 			tok = s.readString()
+		} else if isNumber(s.ch) {
+			tok = s.readNumber()
 		} else {
 			tok = token.New(token.ILLEGAL, string(s.ch), nil, s.line, true) //band-aid solution idk how to handle this
 			message := fmt.Sprintf("Unexpected character: %s", string(s.ch))
@@ -152,6 +165,7 @@ func (s *Scanner) readIdentifier() string {
 	for isLetter(s.ch) {
 		s.readChar()
 	}
+	//do i need to rewind here?
 	return s.input[position:s.position]
 }
 
@@ -159,7 +173,7 @@ func (s *Scanner) readIdentifier() string {
 func (s *Scanner) readString() token.Token {
 	position := s.position
 	s.readChar()
-	for s.ch != '"' && s.ch != '\n' && s.ch != '0' {
+	for s.ch != '"' && s.ch != '\n' && s.ch != 0 {
 		s.readChar()
 	}
 	if s.ch != '"' {
@@ -170,9 +184,31 @@ func (s *Scanner) readString() token.Token {
 	return token.New(token.STRING, lexeme, lexeme[1:len(lexeme)-1], s.line, false)
 }
 
+func (s *Scanner) readNumber() token.Token {
+	position := s.position
+	dotCount := 0
+	for isNumber(s.ch) {
+		s.readChar()
+	}
+	if s.ch == '.' && isNumber(s.peakChar()) {
+		dotCount += 1
+		s.readChar()
+		for isNumber(s.ch) {
+			s.readChar()
+		}
+	}
+	numLexeme := s.input[position:s.position]
+	s.rewind()
+	literal := numLexeme
+	if dotCount == 0 {
+		literal += ".0"
+	}
+	return token.New(token.NUMBER, numLexeme, literal, s.line)
+}
+
 func (s *Scanner) readComment() string {
 	position := s.position
-	for s.ch != '0' && s.ch != '\n' {
+	for s.ch != 0 && s.ch != '\n' {
 		s.readChar()
 	}
 	s.line += 1
@@ -186,12 +222,8 @@ func (s *Scanner) fromSymbol(literal string) token.Token {
 	case "var":
 		tok = token.New(token.VAR, lexeme, nil, s.line)
 	default:
-		if lexeme[0] == '"' && lexeme[len(lexeme)-1] == '"' {
-			escapedLiteral := lexeme[1 : len(lexeme)-1]
-			tok = token.New(token.STRING, lexeme, escapedLiteral, s.line)
-		} else {
-			tok = token.New(token.IDENTFIER, lexeme, nil, s.line)
-		}
+		tok = token.New(token.IDENTFIER, lexeme, nil, s.line)
+
 	}
 	return tok
 }
@@ -227,4 +259,8 @@ func (s *Scanner) Print(tokens []token.Token) string {
 	}
 	fmt.Println(result)
 	return result
+}
+
+func isNumber(char byte) bool {
+	return (char >= '0' && char <= '9')
 }
