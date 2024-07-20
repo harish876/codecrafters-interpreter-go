@@ -1,7 +1,7 @@
 # Lox Language Interpreter
 
 This repository contains an implementation of the Lox programming language interpreter as part of the "Build Your Own Interpreter" challenge from codecrafters.
-This Challenge follows the book - [Crafting Interpreter by Robert Nystrom](https://craftinginterpreters.com/closures.html)
+This Challenge follows the book - [Crafting Interpreter by Robert Nystrom](https://craftinginterpreters.com)
 
 ## Project Description
 
