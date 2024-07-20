@@ -31,7 +31,7 @@ It's time to move on to the next stage!
 # Usage
 1. Add additional grammar rules and code to parser/parser.go
 2. Add test cases to parser/parser_test.go
-3. cd cmd/myinterpreter/parser and run go test to run all test cases
+3. cd cmd/myinterpreter/parser and run ```go test``` to run all test cases or ```go test -run [test_name]``` to run a particular test.
 
 
 # Todo
