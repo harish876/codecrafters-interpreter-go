@@ -1,33 +1,41 @@
-[![progress-banner](https://backend.codecrafters.io/progress/interpreter/c2efb8d7-6606-41f0-bb88-09e6261cd21e)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
+# Lox Language Interpreter
 
-This is a starting point for Go solutions to the
-["Build Your Own Build your own Interpreter" Challenge](https://app.codecrafters.io/courses/interpreter/overview).
+This repository contains an implementation of the Lox programming language interpreter as part of the "Build Your Own Interpreter" challenge from codecrafters.
+This Challenge follows the book - [Crafting Interpreter by Robert Nystrom](https://craftinginterpreters.com/closures.html)
 
-_Add a description of your course here_
+## Project Description
 
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
+The Lox interpreter is built using Go and follows the principles of Test-Driven Development (TDD). It uses a recursive descent parser to convert a stream of lexical tokens into an Abstract Syntax Tree (AST).
 
-# Passing the first stage
+## Getting Started
 
-The entry point for your `<fill_in_executable_name>` implementation is in
-`cmd/myinterpreter/main.go`. Study and uncomment the relevant code, and push
-your changes to pass the first stage:
+### Prerequisites
+
+Please make sure you have Go 1.22 installed on your machine.
+
+### Installation
+
+Clone the repository:
+```sh
+git clone https://github.com/harish876/lox-lang.git
+cd lox-lang
 
 ```sh
-git add .
+git add.
 git commit -m "pass 1st stage" # any msg
 git push origin master
 ```
 
-Time to move on to the next stage!
+It's time to move on to the next stage!
 
-# Stage 2 & beyond
+# Usage
+1. Add additional grammar rules and code to parser/parser.go
+2. Add test cases to parser/parser_test.go
+3. cd cmd/myinterpreter/parser and run go test to run all test cases
 
-Note: This section is for stages 2 and beyond.
 
-1. Ensure you have `go (1.22)` installed locally
-1. Run `./<fill_in_script_name>.sh` to run your program, which is implemented in
-   `cmd/myinterpreter/main.go`.
-1. Commit your changes and run `git push origin master` to submit your solution
-   to CodeCrafters. Test output will be streamed to your terminal.
+# Todo
+1. Adding functions, statements, variable binding, classes ( Completing AST - full language feature set ) 
+2. Converting to Bytecode and running on a VM (future goal) 
+
+
