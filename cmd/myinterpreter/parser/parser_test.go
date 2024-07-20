@@ -76,3 +76,27 @@ func TestPrimary5(t *testing.T) {
 		t.Fatalf("%v", err)
 	}
 }
+
+func TestPrimary6(t *testing.T) {
+	s := scanner.New(`2+3`)
+	tokens, erroredTokens := s.Collect()
+	if len(erroredTokens) > 0 {
+		t.Fatalf("Code contains some errored tokens - %v", erroredTokens)
+	}
+	p := New(tokens)
+	if err := p.Parse(); err != nil {
+		t.Fatalf("%v", err)
+	}
+}
+
+func TestPrimary7(t *testing.T) {
+	s := scanner.New(`1*2+3`)
+	tokens, erroredTokens := s.Collect()
+	if len(erroredTokens) > 0 {
+		t.Fatalf("Code contains some errored tokens - %v", erroredTokens)
+	}
+	p := New(tokens)
+	if err := p.Parse(); err != nil {
+		t.Fatalf("%v", err)
+	}
+}

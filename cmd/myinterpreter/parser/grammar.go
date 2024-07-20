@@ -29,8 +29,8 @@ func (b *Binary) String() string {
 }
 
 type Unary struct {
-	operator token.Token
 	right    Expr
+	operator token.Token
 }
 
 func (u *Unary) String() string {
