@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/parser"
 	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/scanner"
 	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/token"
 )
@@ -19,27 +20,58 @@ func main() {
 
 	command := os.Args[1]
 
-	if command != "tokenize" {
-		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", command)
-		os.Exit(1)
-	}
-
-	filename := os.Args[2]
-	fileContents, err := os.ReadFile(filename)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
-		os.Exit(1)
-	}
-
-	if len(fileContents) > 0 {
-		s := scanner.New(string(fileContents))
-		tokens, erroredTokens := s.Collect()
-		s.Print(tokens)
-		if len(erroredTokens) > 0 {
-			os.Exit(65)
+	switch command {
+	case "tokenize":
+		filename := os.Args[2]
+		fileContents, err := os.ReadFile(filename)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+			os.Exit(1)
 		}
-	} else {
-		tok := token.New(token.EOF, "", nil, 0)
-		fmt.Println(tok.ToString())
+
+		if len(fileContents) > 0 {
+			s := scanner.New(string(fileContents))
+			tokens, erroredTokens := s.Collect()
+			s.Print(tokens)
+			if len(erroredTokens) > 0 {
+				os.Exit(65)
+			}
+		} else {
+			tok := token.New(token.EOF, "", nil, 0)
+			fmt.Println(tok.ToString())
+		}
+
+	case "parse":
+		var toks []token.Token
+		filename := os.Args[2]
+		fileContents, err := os.ReadFile(filename)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+			os.Exit(1)
+		}
+
+		if len(fileContents) > 0 {
+			s := scanner.New(string(fileContents))
+			tokens, erroredTokens := s.Collect()
+			toks = tokens
+			//s.Print(tokens)
+			if len(erroredTokens) > 0 {
+				os.Exit(65)
+			}
+		} else {
+			tok := token.New(token.EOF, "", nil, 0)
+			toks = []token.Token{tok}
+			//fmt.Println(tok.ToString())
+		}
+		//removing the EOF token
+		/*if len(toks) > 0 && toks[len(toks)-1].Type == token.EOF {
+			toks = toks[:len(toks)-1]
+		}*/
+		p := parser.New(toks)
+		if err := p.Parse(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 	}
 }

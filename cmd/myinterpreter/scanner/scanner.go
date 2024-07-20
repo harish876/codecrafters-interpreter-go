@@ -34,6 +34,7 @@ func (s *Scanner) readChar() {
 		s.ch = s.input[s.readPosition]
 	}
 	s.position = s.readPosition
+	s.position = s.readPosition
 	s.readPosition += 1
 }
 
@@ -44,6 +45,7 @@ func (s *Scanner) peakChar() byte {
 	} else {
 		return s.input[position]
 	}
+
 }
 
 func (s *Scanner) rewind() {
@@ -164,7 +166,7 @@ func (s *Scanner) readIdentifier() string {
 	for isLetter(s.ch) || isNumber(s.ch) {
 		s.readChar()
 	}
-	//do i need to rewind here?
+
 	currentPosition := s.position
 	s.rewind()
 	return s.input[position:currentPosition]
@@ -277,7 +279,6 @@ func (s *Scanner) logError(message string) {
 	fmt.Fprintf(os.Stderr, "[line %d] Error: %s\n", s.line, message)
 }
 
-// collect all the tokens within a slice passed in
 func (s *Scanner) Collect() ([]token.Token, []token.Token) {
 	var validTokens []token.Token
 	var erroredTokens []token.Token
