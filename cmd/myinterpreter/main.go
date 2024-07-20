@@ -61,16 +61,12 @@ func main() {
 		} else {
 			tok := token.New(token.EOF, "", nil, 0)
 			toks = []token.Token{tok}
-			//fmt.Println(tok.ToString())
 		}
-		//removing the EOF token
-		/*if len(toks) > 0 && toks[len(toks)-1].Type == token.EOF {
-			toks = toks[:len(toks)-1]
-		}*/
+
 		p := parser.New(toks)
 		if err := p.Parse(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			fmt.Println(err.Error())
+			os.Exit(65)
 		}
 
 	}

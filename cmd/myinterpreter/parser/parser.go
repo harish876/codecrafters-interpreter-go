@@ -37,7 +37,8 @@ func (p *Parser) consume(tokenType token.TokenType, message string) (token.Token
 	if p.check(tokenType) {
 		return p.next(), nil
 	} else {
-		return token.New(token.ILLEGAL, "", nil, 0, true), fmt.Errorf("token - %v, message  - %s", p.peek(), message)
+		return token.New(token.ILLEGAL, "", nil, 0, true), fmt.Errorf("%s", message)
+		//fmt.Errorf("token - %v, message  - %s", p.peek(), message)
 	}
 }
 
@@ -208,14 +209,14 @@ func (p *Parser) primary() (Expr, error) {
 		if err != nil {
 			return nil, err
 		}
-		_, err = p.consume(token.RPAREN, "Expect ')' after expression.")
+		_, err = p.consume(token.RPAREN, "")
 		if err != nil {
 			return nil, err
 		}
 		return NewGrouping(expr), nil
 	}
 
-	return nil, fmt.Errorf("%s", "unknown case")
+	return nil, fmt.Errorf("%s", "")
 
 }
 

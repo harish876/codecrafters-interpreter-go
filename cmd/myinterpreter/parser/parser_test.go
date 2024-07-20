@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/codecrafters-io/interpreter-starter-go/cmd/myinterpreter/scanner"
@@ -94,6 +95,45 @@ func TestPrimary7(t *testing.T) {
 	tokens, erroredTokens := s.Collect()
 	if len(erroredTokens) > 0 {
 		t.Fatalf("Code contains some errored tokens - %v", erroredTokens)
+	}
+	p := New(tokens)
+	if err := p.Parse(); err != nil {
+		t.Fatalf("%v", err)
+	}
+}
+
+func TestPrimary8(t *testing.T) {
+	s := scanner.New(`("foo")`)
+	tokens, erroredTokens := s.Collect()
+	if len(erroredTokens) > 0 {
+		t.Fatalf("Code contains some errored tokens - %v", erroredTokens)
+	}
+	p := New(tokens)
+	if err := p.Parse(); err != nil {
+		t.Fatalf("%v", err)
+	}
+}
+
+func TestPrimary9(t *testing.T) {
+	s := scanner.New(`("foo"`)
+	tokens, erroredTokens := s.Collect()
+	if len(erroredTokens) > 0 {
+		t.Fatalf("Code contains some errored tokens - %v", erroredTokens)
+	}
+	p := New(tokens)
+	if err := p.Parse(); err != nil {
+		fmt.Println(err)
+	}
+}
+
+func TestPrimary10(t *testing.T) {
+	s := scanner.New(`()`)
+	tokens, erroredTokens := s.Collect()
+	if len(erroredTokens) > 0 {
+		t.Fatalf("Code contains some errored tokens - %v", erroredTokens)
+	}
+	for _, tok := range tokens {
+		fmt.Println(tok.Type)
 	}
 	p := New(tokens)
 	if err := p.Parse(); err != nil {

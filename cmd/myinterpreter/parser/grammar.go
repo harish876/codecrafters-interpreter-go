@@ -63,5 +63,5 @@ func NewGrouping(expr Expr) *Grouping {
 
 // TODO
 func (g *Grouping) String() string {
-	return fmt.Sprintf("group %s", g.Value.String())
+	return fmt.Sprintf("(group %s)", g.Value.String())
 }
